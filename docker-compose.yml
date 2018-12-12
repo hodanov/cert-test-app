@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  db:
+    container_name: crt-test-app-db
+    image: postgres:10
+    ports:
+      - 5432:5432
+  web:
+    container_name: crt-test-app-web
+    build: .
+    command: ./docker-entrypoint.sh
+    volumes:
+      - .:/code
+      - /var/run/docker.sock:/var/run/docker.sock
+    tty: true
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+  nginx:
+    container_name: crt-test-app-nginx
+    image: nginx:1.15
+    volumes:
+      - ./files:/etc/nginx/conf.d
+    tty: true
+    ports:
+      - 443:443
+    depends_on:
+      - web

@@ -1,0 +1,134 @@
+/* -----body----- */
+body {
+  background-color: #fafafa;
+  min-height: 100vh;
+}
+
+/* -----Header----- */
+.navbar {
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+}
+
+/* -----Flash message----- */
+#flash-message-mark {
+  max-width: 3%;
+  margin-right: .5rem;
+}
+.message-body p {
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  color: #555;
+}
+.modal-card-body h2, .modal-card-body h3 {
+  margin: 1rem 0;
+}
+.modal-background {
+  background-color: rgba(10,10,10,.5);
+}
+
+/* -----Badge----- */
+.badge {
+  background: #ffdd57;
+  border-radius: 2px 2px 0 0;
+  bottom: 100%;
+  color: rgba(0,0,0,.7);
+  content: "Example";
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  left: -1px;
+  letter-spacing: 1px;
+  margin-left: -1px;
+  padding: 3px 5px;
+  position: relative;
+  top: .75rem;
+  text-transform: uppercase;
+  vertical-align: top;
+  z-index: 10;
+}
+
+/* -----main-container----- */
+#main-container {
+  padding-bottom: 3rem;
+}
+
+/* icatch */
+.responsive-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 4px;
+}
+.responsive-image {
+  background-size: cover;
+  background-position: 50% 50%;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+.responsive-image-wrapper:before {
+  content: "";
+  display: block;
+  padding-top: 40%;
+}
+
+/* Forms */
+.file-name {
+  max-width: inherit;
+  background-color: #fff;
+}
+.box {
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+  height: 100%;
+  background-size: cover;
+  background-position: 50% 50%;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding-bottom: 0;
+}
+.box#feature-caption {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#feature-caption-text {
+  z-index: 20;
+}
+#feature-caption-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, .9);
+}
+
+/* Eventlog */
+table.table.is-fullwidth {
+  border-radius: 3px;
+}
+.table thead td, .table thead th {
+  color: #4a4a4a;
+}
+
+/* SVG icon */
+.svg-icon {
+  height: 16px;
+  max-width: 16px;
+  margin-top: 4px;
+  margin-right: 4px;
+}
+
+.test-result-column {
+  display: inline-flex;
+}

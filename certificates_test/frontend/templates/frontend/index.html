@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CERT TEST APP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+    <link rel="stylesheet" href="{% static 'frontend/custom.css' %}">
+    <link rel="icon" href="{% static 'frontend/img/locked.png' %}">
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="/">
+            <h1 class="title is-size-4">
+              <img src="{% static 'frontend/img/locked.svg' %}" alt="logo">
+              CERT TEST APP
+            </h1>
+            <div class="buttons">
+              <a href="#" id="about-test-mechanism-anchor-button" class="button is-primary is-outlined">テストロジックについて</a>
+            </div>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    {% if messages %}
+    <div class="modal is-active" id="flash-msg-box">
+      <div class="modal-background" id="flash-msg-background"></div>
+      <div class="modal-content">
+        <article class="message is-primary">
+          <div class="message-header">
+            <p></p>
+            <button class="delete" aria-label="delete" id="delete-flash-btn"></button>
+          </div>
+          <div class="message-body">
+            {% for message in messages %}
+              {% if message.tags == "success" %}
+                <p><img id="flash-message-mark" src="{% static 'frontend/img/check-circle-solid.svg' %}" alt="check-circle-mark">{{ message }}</p>
+              {% else %}
+                <p><img id="flash-message-mark" src="{% static 'frontend/img/exclamation-triangle-solid.svg' %}" alt="exclamation-mark">{{ message }}</p>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </article>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="modal" id="about-test-mechanism">
+      <div class="modal-background" id="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">テストロジックについて</p>
+          <button class="delete" aria-label="close" id="delete-modal-btn"></button>
+        </header>
+        <section class="modal-card-body">
+          <p><code>OpenSSL</code>を使ってサーバー証明書と中間証明書、秘密鍵の組み合わせをチェックします。</p>
+          <h3 class="is-size-5 has-text-weight-bold">サーバー証明書と中間証明書のチェック</h3>
+          <p>サーバー証明書の<strong>subject</strong>と中間証明書の<strong>issuer</strong>が一致すればOK、一致しなければNGとなります。</p>
+          <pre>openssl x509 -subject_hash -noout -in INCRT.crt<br>openssl x509 -issuer_hash -noout -in CRT.crt</pre>
+          <h3 class="is-size-5 has-text-weight-bold">サーバー証明書と秘密鍵のチェック</h3>
+          <p>サーバー証明書に含まれている公開鍵と、CSR作成に使用した秘密鍵が一致すればOK、一致しなければNGとなります。</p>
+          <pre>openssl rsa -noout -modulus -in KEY.key | openssl md5<br>openssl x509 -noout -modulus -in CRT.crt | openssl md5</pre>
+        </section>
+      </div>
+    </div>
+
+    <div id="main-container" class="container">
+      <div class="columns">
+        <div class="column is-4">
+          <div class="badge">Caption</div>
+          <div class="box" id="feature-caption" style="background-image: url({% static 'frontend/img/bg.jpg' %})">
+            <div id="feature-caption-text">
+              <p class="subtitle">
+                これは発行された証明書の組み合わせを確認するアプリケーションです。
+              </p>
+              <p class="subtitle">
+                フォームボタンを押して証明書を選択し、テストを実行してください。
+              </p>
+            </div>
+            <div id="feature-caption-cover"></div>
+          </div>
+        </div>
+        <div class="column is-8">
+          <div class="badge">Form button</div>
+          <div class="box">
+            <form class="" action="{% url 'index' %}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div id="choose-file-forms"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column is-12">
+          <div class="badge">Event log</div>
+          <div class="box">
+            <table class="table is-fullwidth is-striped is-narrow is-hoverable">
+              <thead>
+                <tr>
+                  <th>テスト日時</th>
+                  <th>結果</th>
+                  <th>コモンネーム</th>
+                  <th>CRTファイル名</th>
+                  <th>INCRTファイル名</th>
+                  <th>KEYファイル名</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in event_log %}
+                <tr>
+                  <td>{{ item.tested_at }}</td>
+                  <td>
+                    {% if item.is_test_result %}
+                    <span class="has-text-primary test-result-column"><img src="{% static 'frontend/img/check-circle-solid.svg' %}" alt="OKマーク" class="svg-icon">OK</span>
+                    {% else %}
+                    <span class="has-text-danger test-result-column"><img src="{% static 'frontend/img/exclamation-triangle-solid.svg' %}" alt="NGマーク" class="svg-icon">NG</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ item.common_name }}</td>
+                  <td>{{ item.filename_crt }}</td>
+                  <td>{{ item.filename_incrt }}</td>
+                  <td>{{ item.filename_key }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <nav class="pagination" role="navigation" aria-label="pagination">
+              {% if event_log.has_previous %}
+                <a class="pagination-previous" href="{% url 'index' %}{{event_log.previous_page_number}}">Previous</a>
+              {% endif %}
+              {% if event_log.has_next %}
+                <a class="pagination-next" href="{% url 'index' %}{{event_log.next_page_number}}">Next page</a>
+              {% endif %}
+              <ul class="pagination-list">
+                {% for page in event_log.paginator.page_range %}
+                  {% if event_log.number <= 3 %}
+                    <li>
+                      {% if page == event_log.number %}
+                        <a class="pagination-link" aria-label="Page {{ page_link }}" aria-current="page" href="{% url 'index' %}{{ page }}" disabled>{{ page }}</a>
+                      {% elif page == event_log.paginator.num_pages %}
+                        <a class="pagination-link" aria-label="Page {{ page_link }}" aria-current="page" href="{% url 'index' %}{{ page }}">{{ page }}</a>
+                      {% elif page == 5 %}
+                        <li><span class="pagination-ellipsis">&hellip;</span></li>
+                      {% elif page > 5 %}
+                      {% else %}
+                        <a class="pagination-link" aria-label="Page {{ page_link }}" aria-current="page" href="{% url 'index' %}{{ page }}">{{ page }}</a>
+                      {% endif %}
+                    </li>
+                  {% elif event_log.number >= 4 %}
+                    <li>
+                      {% if page == event_log.number %}
+                        <a class="pagination-link" aria-label="Page {{ page_link }}" aria-current="page" href="{% url 'index' %}{{ page }}" disabled>{{ page }}</a>
+                      {% elif page == event_log.paginator.num_pages %}
+                        <a class="pagination-link" aria-label="Page {{ page_link }}" aria-current="page" href="{% url 'index' %}{{ page }}">{{ page }}</a>
+                      {% elif page == 1 %}
+                        <a class="pagination-link" aria-label="Page {{ page_link }}" aria-current="page" href="{% url 'index' %}{{ page }}">{{ page }}</a>
+                      {% elif page > 2 and page < event_log.previous_page_number %}
+                      {% elif page > event_log.next_page_number and page < event_log.paginator.num_pages|add:"-1" %}
+                      {% elif page > 1 and page < event_log.previous_page_number or page > event_log.next_page_number and page < event_log.paginator.num_pages %}
+                        <li><span class="pagination-ellipsis">&hellip;</span></li>
+                      {% else %}
+                        <a class="pagination-link" aria-label="Page {{ page_link }}" aria-current="page" href="{% url 'index' %}{{ page }}">{{ page }}</a>
+                      {% endif %}
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'frontend/main.js' %}"></script>
+  </body>
+</html>

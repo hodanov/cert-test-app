@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21px" height="25px" viewBox="0 0 21 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>locked</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Filled" transform="translate(-152.000000, -250.000000)" fill="#000000">
+            <g id="locked" transform="translate(152.000000, 250.000000)">
+                <path d="M16,10 L5,10 L5,6.5 C5,3.467 7.468,1 10.5,1 C11.956,1 13.337,1.574 14.385,2.612 C15.427,3.663 16,5.044 16,6.5 L16,10 Z M11.474,18.132 C11.406,18.618 11.005,19 10.5,19 C9.995,19 9.594,18.618 9.526,18.132 C9.207,17.856 9,17.454 9,17 C9,16.173 9.673,15.5 10.5,15.5 C11.327,15.5 12,16.173 12,17 C12,17.454 11.793,17.856 11.474,18.132 L11.474,18.132 Z M19.5,10 L17,10 L17,6.5 C17,4.778 16.323,3.148 15.092,1.905 C13.853,0.676 12.222,0 10.5,0 C6.916,0 4,2.916 4,6.5 L4,10 L1.5,10 C0.673,10 0,10.673 0,11.5 L0,23.5 C0,24.327 0.673,25 1.5,25 L19.5,25 C20.327,25 21,24.327 21,23.5 L21,11.5 C21,10.673 20.327,10 19.5,10 L19.5,10 Z" id="Page-1"></path>
+            </g>
+        </g>
+    </g>
+</svg>
